@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  fastapi-lbp:
+    build:
+      context: ./LBP
+      dockerfile: Dockerfile
+    container_name: fastapi_lbp
+    volumes:
+      - ./LBP/train/texture_dataset:/app/train/texture_dataset
+      - ./LBP/predict/texture_dataset:/app/predict/texture_dataset
+      - ./LBP/pickled_models:/app/pickled_models
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+
+  fastapi-minivgg:
+    build:
+      context: ./miniVGG
+      dockerfile: Dockerfile
+    container_name: fastapi_minivgg
+    volumes:
+      - ./miniVGG/train/animals:/app/train/animals
+      - ./miniVGG/predict/animals:/app/predict/animals
+      - ./miniVGG/pickled_models:/app/pickled_models
+    ports:
+      - "8001:8001"
+    networks:
+      - mynetwork
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+      
