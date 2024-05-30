@@ -2,30 +2,26 @@ version: '3.3'
 
 services:
   fastapi-lbp:
-    build:
-      context: ./LBP
-      dockerfile: Dockerfile
+    image: python:3.9-slim-bullseye
     container_name: fastapi_lbp
+    working_dir: /app
     volumes:
-      - ./LBP/train/texture_dataset:/app/train/texture_dataset
-      - ./LBP/predict/texture_dataset:/app/predict/texture_dataset
-      - ./LBP/pickled_models:/app/pickled_models
+      - ./LBP:/app
     ports:
       - "8000:8000"
+    command: /app/start.sh
     networks:
       - mynetwork
 
   fastapi-minivgg:
-    build:
-      context: ./miniVGG
-      dockerfile: Dockerfile
+    image: python:3.9-slim-bullseye
     container_name: fastapi_minivgg
+    working_dir: /app
     volumes:
-      - ./miniVGG/train/animals:/app/train/animals
-      - ./miniVGG/predict/animals:/app/predict/animals
-      - ./miniVGG/pickled_models:/app/pickled_models
+      - ./miniVGG:/app
     ports:
       - "8001:8001"
+    command: /app/start.sh
     networks:
       - mynetwork
 
